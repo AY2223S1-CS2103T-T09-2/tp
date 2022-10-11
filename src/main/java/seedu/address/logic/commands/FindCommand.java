@@ -4,10 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import seedu.address.commons.core.Messages;
 import seedu.address.model.Model;
-import seedu.address.model.person.Buyer;
-import seedu.address.model.person.Deliverer;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
-import seedu.address.model.person.Supplier;
+import seedu.address.model.person.*;
 
 /**
  * Finds and lists all persons in address book whose name contains any of the argument keywords.
@@ -28,7 +25,7 @@ public class FindCommand extends Command {
 
     private final NameContainsKeywordsPredicate<Supplier> sPredicate;
 
-    private final String type;
+    private final PersonCategory category;
 
     /**
      * Constructs a FindCommand, which has three predicates - one
@@ -38,17 +35,16 @@ public class FindCommand extends Command {
      * @param bPredicate A Predicate for Buyers.
      * @param dPredicate A Predicate for Deliverers.
      * @param sPredicate A Predicate for Suppliers.
-     * @param type Whether to return a CommandResult relevant to the
-     *             Buyer, Deliverer or Supplier.
+     * @param category A PersonCategory.
      * @return FindCommand.
      */
     public FindCommand(NameContainsKeywordsPredicate<Buyer> bPredicate,
                        NameContainsKeywordsPredicate<Deliverer> dPredicate,
-                       NameContainsKeywordsPredicate<Supplier> sPredicate, String type) {
+                       NameContainsKeywordsPredicate<Supplier> sPredicate, PersonCategory category) {
         this.bPredicate = bPredicate;
         this.dPredicate = dPredicate;
         this.sPredicate = sPredicate;
-        this.type = type;
+        this.category = category;
     }
 
     @Override
@@ -57,10 +53,10 @@ public class FindCommand extends Command {
         model.updateFilteredBuyerList(bPredicate);
         model.updateFilteredDelivererList(dPredicate);
         model.updateFilteredSupplierList(sPredicate);
-        if (type.equals("Buyer")) {
+        if (category.equals(new PersonCategory("Buyer"))) {
             return new CommandResult(
                     String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredBuyerList().size()));
-        } else if (type.equals("Deliverer")) {
+        } else if (category.equals(new PersonCategory("Deliverer"))) {
             return new CommandResult(
                     String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredDelivererList().size()));
         } else {
@@ -76,6 +72,6 @@ public class FindCommand extends Command {
                 && bPredicate.equals(((FindCommand) other).bPredicate) // state checck
                 && dPredicate.equals(((FindCommand) other).dPredicate)
                 && sPredicate.equals(((FindCommand) other).sPredicate)
-                && type.equals(((FindCommand) other).type));
+                && category.equals(((FindCommand) other).category));
     }
 }
