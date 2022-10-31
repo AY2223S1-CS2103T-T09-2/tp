@@ -62,7 +62,7 @@ public class MatchCommand extends Command {
         Comparator<Pet> comparator = (x, y) -> Double.compare(petScoreMap.getOrDefault(y, 0.0),
                         petScoreMap.getOrDefault(x, 0.0));
         model.sortPet(comparator);
-        
+
 
         return new CommandResult(MESSAGE_SUCCESS);
     }
